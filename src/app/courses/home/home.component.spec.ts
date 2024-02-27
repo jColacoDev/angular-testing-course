@@ -73,7 +73,7 @@ describe('HomeComponent', () => {
     expect(tabs.length).toBe(2, 'Unexpected number of tabs found');
   });
 
-  xit("should display advanced courses when tab clicked", () => {
+  xit("should display advanced courses when tab clicked", (done: DoneFn) => {
     coursesService.findAllCourses.and.returnValue(of(setupCourses()));
     fixture.detectChanges();
     const tabs = el.queryAll(By.css('.mdc-tab'));
