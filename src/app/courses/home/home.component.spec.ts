@@ -73,7 +73,7 @@ describe('HomeComponent', () => {
     expect(tabs.length).toBe(2, 'Unexpected number of tabs found');
   });
 
-  xit("should display advanced courses when tab clicked", (done: DoneFn) => {
+  it("should display advanced courses when tab clicked with done()", (done: DoneFn) => {
     coursesService.findAllCourses.and.returnValue(of(setupCourses()));
     fixture.detectChanges();
     const tabs = el.queryAll(By.css('.mdc-tab'));
@@ -81,11 +81,47 @@ describe('HomeComponent', () => {
     click(tabs[1]);
     fixture.detectChanges();
 
+    setTimeout(()=>{
+      const cardTitles = el.queryAll(By.css('.mat-mdc-card-title'));
+  
+      expect(cardTitles.length).toBeGreaterThan(0,'could not find card titles');
+      expect(cardTitles[0].nativeElement.textContent).toContain("Angular Testing Course");
+      
+      done();
+    }, 1000)
+  });
+
+  it("should display advanced courses when tab clicked with fakeAsync", fakeAsync(() => {
+    coursesService.findAllCourses.and.returnValue(of(setupCourses()));
+    fixture.detectChanges();
+    const tabs = el.queryAll(By.css('.mdc-tab'));
+    // el.nativeElement.click();
+    click(tabs[1]);
+    fixture.detectChanges();
+    
+    flush();
+    
     const cardTitles = el.queryAll(By.css('.mat-mdc-card-title'));
 
     expect(cardTitles.length).toBeGreaterThan(0,'could not find card titles');
-    expect(cardTitles[0].nativeElement.textContent).toContain("Angular Security Course");
-  });
+    expect(cardTitles[0].nativeElement.textContent).toContain("Angular Testing Course");
+  }));
+
+  it("should display advanced courses when tab clicked with async", waitForAsync(() => {
+    coursesService.findAllCourses.and.returnValue(of(setupCourses()));
+    fixture.detectChanges();
+    const tabs = el.queryAll(By.css('.mdc-tab'));
+    // el.nativeElement.click();
+    click(tabs[1]);
+    fixture.detectChanges();
+    
+    fixture.whenStable().then(()=>{
+      const cardTitles = el.queryAll(By.css('.mat-mdc-card-title'));
+  
+      expect(cardTitles.length).toBeGreaterThan(0,'could not find card titles');
+      expect(cardTitles[0].nativeElement.textContent).toContain("Angular Testing Course");
+    })    
+  }));
 });
 
 
